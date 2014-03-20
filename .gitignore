@@ -1,2 +1,5 @@
+doc
 .*.swp
+*.rlib
 sort-test
+tags
