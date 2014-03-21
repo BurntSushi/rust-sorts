@@ -7,6 +7,7 @@ use stdtest::BenchHarness;
 use super::heap;
 use super::merge;
 use super::quick;
+use super::{bogo, insertion, bubble, selection};
 
 static SIZE_SORTED: uint = 1000;
 static SIZE_SAME: uint = 1000;
