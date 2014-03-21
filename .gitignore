@@ -3,3 +3,4 @@ doc
 *.rlib
 sort-test
 tags
+bench.json

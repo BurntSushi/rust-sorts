@@ -21,7 +21,7 @@ test: sort-test
 	RUST_TEST_TASKS=1 RUST_LOG=quickcheck,sorts ./sort-test
 
 bench: sort-test
-	RUST_TEST_TASKS=1 RUST_LOG=quickcheck,sorts ./sort-test --bench
+	RUST_TEST_TASKS=1 RUST_LOG=quickcheck,sorts ./sort-test --bench --save-metrics=bench.json
 
 sort-test: src/lib.rs src/test.rs src/bench.rs
 	rustc -O --test $(RUST_CFG) src/lib.rs -o sort-test

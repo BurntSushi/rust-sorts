@@ -1,4 +1,5 @@
 use quickcheck::quickcheck;
+use super::heap;
 use super::merge;
 use super::quick;
 
@@ -61,30 +62,39 @@ macro_rules! defunstable(
 defsamelen!(samelen_std, std_sort)
 defsamelen!(samelen_insertion, super::insertion)
 defsamelen!(samelen_bubble, super::bubble)
+defsamelen!(samelen_selection, super::selection)
 defsamelen!(samelen_merge, merge::sort)
+defsamelen!(samelen_merge_insertion, merge::insertion)
+defsamelen!(samelen_heapsort_up, heap::up)
+defsamelen!(samelen_heapsort_down, heap::down)
 defsamelen!(samelen_quicksort_dumb, quick::dumb)
 defsamelen!(samelen_quicksort_smart, quick::smart)
-defsamelen!(samelen_quicksort_simple,
-            |xs: &mut [int]| as_mutable(xs, quick::simple))
+defsamelen!(samelen_quicksort_insertion, quick::insertion)
 
 defsorted!(sorted_std, std_sort)
 defsorted!(sorted_insertion, super::insertion)
 defsorted!(sorted_bubble, super::bubble)
+defsorted!(sorted_selection, super::selection)
 defsorted!(sorted_merge, merge::sort)
+defsorted!(sorted_merge_insertion, merge::insertion)
+defsorted!(sorted_heapsort_up, heap::up)
+defsorted!(sorted_heapsort_down, heap::down)
 defsorted!(sorted_quicksort_dumb, quick::dumb)
 defsorted!(sorted_quicksort_smart, quick::smart)
-defsorted!(sorted_quicksort_simple,
-           |xs: &mut [int]| as_mutable(xs, quick::simple))
+defsorted!(sorted_quicksort_insertion, quick::insertion)
 
 defstable!(stable_std, std_sort)
 defstable!(stable_insertion, super::insertion)
 defstable!(stable_bubble, super::bubble)
 defstable!(stable_merge, merge::sort)
-defstable!(stable_quicksort_simple,
-           |xs: &mut [Pair]| as_mutable(xs, quick::simple))
+defstable!(stable_merge_insertion, merge::insertion)
 
+defunstable!(unstable_selection, super::selection)
+defunstable!(unstable_heapsort_up, heap::up)
+defunstable!(unstable_heapsort_down, heap::down)
 defunstable!(unstable_quicksort_dumb, quick::dumb)
 defunstable!(unstable_quicksort_smart, quick::smart)
+defunstable!(unstable_quicksort_insertion, quick::insertion)
 
 fn std_sort<T: TotalOrd>(xs: &mut [T]) {
     xs.sort()
@@ -97,12 +107,6 @@ fn is_sorted<T: TotalOrd>(xs: &[T]) -> bool {
         }
     }
     true
-}
-
-fn as_mutable<T: TotalOrd + Clone>(xs: &mut [T], sort: fn(~[T]) -> ~[T]) {
-    let ys = sort(xs.to_owned());
-    let len = xs.len();
-    xs.move_from(ys, 0, len);
 }
 
 #[deriving(Show, Clone)]
