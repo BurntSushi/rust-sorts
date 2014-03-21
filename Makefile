@@ -1,4 +1,4 @@
-RUST_CFG=
+RUST_CFG ?= --cfg sorted --cfg same --cfg micro --cfg small --cfg medium --cfg large
 
 compile:
 	rustc ./src/lib.rs
@@ -20,10 +20,13 @@ docs:
 test: sort-test
 	RUST_TEST_TASKS=1 RUST_LOG=quickcheck,sorts ./sort-test
 
-bench: sort-test
+sort-test: src/lib.rs src/test.rs src/bench.rs
+	rustc -O --test src/lib.rs -o sort-test
+
+bench: bench-test
 	RUST_TEST_TASKS=1 RUST_LOG=quickcheck,sorts ./sort-test --bench --save-metrics=bench.json
 
-sort-test: src/lib.rs src/test.rs src/bench.rs
+bench-test: src/lib.rs src/test.rs src/bench.rs
 	rustc -O --test $(RUST_CFG) src/lib.rs -o sort-test
 
 test-clean:
