@@ -8,6 +8,9 @@ stable/unstable depending on the algorithm used.
 
 There is some documentation of the API: http://burntsushi.net/rustdoc/sorts
 
+Many of the implementations were done with inspiration from the relevant
+Wikipedia articles.
+
 Tests can be run with `make test`. Benchmarks can be run with `make bench`. 
 Since they can take a long time to run, here are all benchmarks on my machine.
 My specs: Intel i3930K (12 threads) with 32GB of memory. Compiled with `-O`.
