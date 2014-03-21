@@ -34,5 +34,5 @@ clean: test-clean
 
 push:
 	git push origin master
-	# git push github master 
+	git push github master
 
