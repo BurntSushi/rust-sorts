@@ -1,11 +1,10 @@
-#[crate_id = "sorts#0.1.0"];
-#[crate_type = "lib"];
-#[license = "UNLICENSE"];
-#[doc(html_root_url = "http://burntsushi.net/rustdoc/rust-sorts")];
+#![crate_id = "sorts#0.1.0"]
+#![crate_type = "lib"]
+#![license = "UNLICENSE"]
+#![doc(html_root_url = "http://burntsushi.net/rustdoc/rust-sorts")]
 
-#[feature(phase)];
-#[feature(macro_rules)];
-#[allow(deprecated_owned_vector)];
+#![feature(phase)]
+#![feature(macro_rules)]
 
 //! A collection of sorting algorithms with tests and benchmarks.
 
@@ -255,7 +254,7 @@ pub mod heap {
 
 pub mod merge {
     use std::cmp::min;
-    use std::vec::MutableCloneableVector;
+    use std::slice::MutableCloneableVector;
 
     use super::INSERTION_THRESHOLD;
 

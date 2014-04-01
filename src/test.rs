@@ -7,9 +7,9 @@ macro_rules! defsamelen(
     ($name:ident, $sorter:expr) => (
         #[test]
         fn $name() {
-            fn prop(mut xs: ~[int]) -> bool {
+            fn prop(mut xs: Vec<int>) -> bool {
                 let len = xs.len();
-                $sorter(xs);
+                $sorter(xs.as_mut_slice());
                 len == xs.len()
             }
             quickcheck(prop);
@@ -21,9 +21,9 @@ macro_rules! defsorted(
     ($name:ident, $sorter:expr) => (
         #[test]
         fn $name() {
-            fn prop(mut xs: ~[int]) -> bool {
-                $sorter(xs);
-                is_sorted(xs)
+            fn prop(mut xs: Vec<int>) -> bool {
+                $sorter(xs.as_mut_slice());
+                is_sorted(xs.as_slice())
             }
             quickcheck(prop);
         }
@@ -34,10 +34,10 @@ macro_rules! defstable(
     ($name:ident, $sorter:expr) => (
         #[test]
         fn $name() {
-            fn prop(xs: ~[int]) -> bool {
-                let mut sxs = stable_annotate(xs);
-                $sorter(sxs);
-                is_stable(sxs)
+            fn prop(xs: Vec<int>) -> bool {
+                let mut sxs = stable_annotate(xs.as_slice());
+                $sorter(sxs.as_mut_slice());
+                is_stable(sxs.as_slice())
             }
             quickcheck(prop);
         }
@@ -49,10 +49,10 @@ macro_rules! defunstable(
         #[test]
         #[should_fail]
         fn $name() {
-            fn prop(xs: ~[int]) -> bool {
-                let mut sxs = stable_annotate(xs);
-                $sorter(sxs);
-                is_stable(sxs)
+            fn prop(xs: Vec<int>) -> bool {
+                let mut sxs = stable_annotate(xs.as_slice());
+                $sorter(sxs.as_mut_slice());
+                is_stable(sxs.as_slice())
             }
             quickcheck(prop);
         }
@@ -127,11 +127,7 @@ impl Ord for Pair {
     }
 }
 
-impl TotalEq for Pair {
-    fn equals(&self, other: &Pair) -> bool {
-        self.val == other.val
-    }
-}
+impl TotalEq for Pair {}
 
 impl TotalOrd for Pair {
     fn cmp(&self, other: &Pair) -> Ordering {
@@ -139,8 +135,8 @@ impl TotalOrd for Pair {
     }
 }
 
-fn stable_annotate(xs: &[int]) -> ~[Pair] {
-    let mut pairs = ~[];
+fn stable_annotate(xs: &[int]) -> Vec<Pair> {
+    let mut pairs = vec!();
     for (i, &x) in xs.iter().enumerate() {
         pairs.push(Pair { val: x, vestigial: i, })
     }
@@ -148,9 +144,9 @@ fn stable_annotate(xs: &[int]) -> ~[Pair] {
 }
 
 fn is_stable(xs: &[Pair]) -> bool {
-    fn vestigial_groups(xs: &[Pair]) -> ~[~[uint]] {
-        let mut groups: ~[~[uint]] = ~[];
-        let mut current: ~[uint] = ~[];
+    fn vestigial_groups(xs: &[Pair]) -> Vec<Vec<uint>> {
+        let mut groups: Vec<Vec<uint>> = vec!();
+        let mut current: Vec<uint> = vec!();
         for (i, &x) in xs.iter().enumerate() {
             if i == 0 {
                 current.push(x.vestigial);
@@ -160,7 +156,7 @@ fn is_stable(xs: &[Pair]) -> bool {
                 current.push(x.vestigial)
             } else {
                 groups.push(current);
-                current = ~[x.vestigial];
+                current = vec!(x.vestigial);
             }
         }
         if current.len() > 0 {
@@ -168,8 +164,8 @@ fn is_stable(xs: &[Pair]) -> bool {
         }
         groups
     }
-    let groups = vestigial_groups(xs);
+    let groups = vestigial_groups(xs.as_slice());
     // debug!("BEFORE GROUPS: {}", xs); 
     // debug!("GROUPS: {}", groups); 
-    groups.move_iter().all(|g| is_sorted(g))
+    groups.move_iter().all(|g| is_sorted(g.as_slice()))
 }
