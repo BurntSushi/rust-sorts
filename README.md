@@ -1,3 +1,7 @@
+**Deprecated:** This is pre-rust 1.0 code. A majority of it will not compile or
+otherwise work in modern Rust. It is kept here for legacy but is not recommended 
+to learn from or use.
+
 A comparison of different sort algorithms in Rust. This includes mergesort, 
 quicksort, heapsort, insertion sort, selection sort, bubble sort and even bogo 
 sort. The library comes with benchmarks for vectors of different sizes and for 
